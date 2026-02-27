@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState , useRef } from "react";
+
+// let timer;
 
 export default function TimeChallenge({ title  , targetTime }) {
 
+    const timer = useRef();
     const [timerStarted , setTimerStarted] = useState(false);
     const [timerExpired , setTimerExpired] = useState(false);
 
+    // let timer;
+
     function handleStart() {
-        setTimeout(() => {
+        timer.current = setTimeout(() => {
             setTimerExpired(true);
         },targetTime * 1000);
 
@@ -14,8 +19,7 @@ export default function TimeChallenge({ title  , targetTime }) {
     }
 
     function handleStop() {
-        //How do we get access to timer in this function ?
-        //The answer is with the help of refs
+        clearTimeout(timer.current);
     }
 
     return (
@@ -26,7 +30,7 @@ export default function TimeChallenge({ title  , targetTime }) {
                 {targetTime} second{targetTime > 1 ? 's' : ''}
             </p>
             <p>
-                <button onClick={handleStart}>
+                <button onClick={timerStarted ? handleStop : handleStart}>
                     {timerStarted ? 'Stop' : 'Start'} Challenge
                 </button>
             </p>
